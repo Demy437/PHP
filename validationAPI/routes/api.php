@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\ClubController;
 use App\Http\Controllers\Api\PlayerController;
+use App\Http\Requests;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::patch('/{players}/{id}', [PlayerController::class, 'updatePlayer']); 
+
 Route::get   ('clubs',          'App\Http\Controllers\Api\ClubController@getAllClubs');
 Route::get   ('clubs/{id}',     'App\Http\Controllers\Api\ClubController@getClub');
 Route::post  ('clubs',          'App\Http\Controllers\Api\ClubController@createClub');
@@ -33,3 +36,11 @@ Route::post  ('players',          'App\Http\Controllers\Api\PlayerController@cre
 Route::put   ('players/{id}',     'App\Http\Controllers\Api\PlayerController@updatePlayer');
 Route::delete('players/{id}',     'App\Http\Controllers\Api\PlayerController@deletePlayer');
 
+Route::post ("validate", [PlayerController::class, 'dataValidator']);
+
+Route::post('register', [PassportAuthController::class, 'register']);
+Route::post('login', [PassportAuthController::class, 'login']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::resource('posts', PostController::class);
+});
